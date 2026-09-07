@@ -6,16 +6,35 @@
  *
  * Quick edits:
  *   --overlay-scale  changes the overall controller size (0.70 to 1.00 works well)
- *   --accent         changes the cyan stick/trigger highlight
+ *   --accent         changes the purple stick/trigger highlight
  *   --shadow         changes the controller's soft shadow
+ *   --chassis-tint-strength changes the body tint (0 = black, up to about .55)
+ *   --decal-image    accepts a public PNG, WebP, or SVG URL
  */
 
 :root {
   --overlay-scale: 0.82;
-  --accent: #22d3ee;
-  --accent-soft: rgba(34, 211, 238, 0.38);
-  --accent-faint: rgba(34, 211, 238, 0.13);
+  --accent: #5b21b6;
+  --accent-bright: #a78bfa;
+  --accent-soft: rgba(109, 40, 217, 0.46);
+  --accent-faint: rgba(109, 40, 217, 0.16);
   --shadow: rgba(0, 0, 0, 0.62);
+
+  /* Chassis customisation: keep strength at 0 for the standard black body. */
+  --chassis-color: #35106b;
+  --chassis-tint-strength: 0;
+
+  /*
+   * Decal customisation. Replace "none" with:
+   * url("https://YOUR-NAME.github.io/gamepadviewer-css/decal.png")
+   */
+  --decal-image: none;
+  --decal-width: 82px;
+  --decal-height: 82px;
+  --decal-left: 334px;
+  --decal-top: 158px;
+  --decal-opacity: 0.95;
+  --decal-rotation: 0deg;
 
   --xbox-a: #39b54a;
   --xbox-b: #c1272d;
@@ -59,6 +78,46 @@ body {
 /* Preserve GamePad Viewer's disconnected warning artwork. */
 .controller.xbox.edit.disconnected {
   background-image: url("https://app.gpv.gg/xbox-assets/disconnected.svg") !important;
+}
+
+/*
+ * Optional chassis tint. The Xbox body SVG is used as a mask, so the dark/light
+ * sculpted detail remains visible underneath the colour layer. A strength of
+ * 0 disables it; .20 is subtle, .35 is clearly coloured, and .55 is bold.
+ */
+.controller.xbox.edit::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 750px;
+  height: 630px;
+  background: var(--chassis-color);
+  opacity: var(--chassis-tint-strength);
+  mix-blend-mode: screen;
+  -webkit-mask: url("https://app.gpv.gg/xbox-assets/base.svg") center / contain no-repeat;
+  mask: url("https://app.gpv.gg/xbox-assets/base.svg") center / contain no-repeat;
+}
+
+/*
+ * Optional single decal. Transparent PNG, WebP, or SVG artwork works best.
+ * The default value is "none", so no decal is shown until a URL is supplied.
+ */
+.controller.xbox.edit::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: var(--decal-left);
+  top: var(--decal-top);
+  width: var(--decal-width);
+  height: var(--decal-height);
+  background-image: var(--decal-image);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: var(--decal-opacity);
+  transform: rotate(var(--decal-rotation));
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.55));
 }
 
 /*
@@ -110,7 +169,7 @@ body {
 }
 
 /*
- * Static reference rings make the stick travel easy to read during fast aerials.
+ * Purple reference rings make the stick travel easy to read during fast aerials.
  * The real stick caps move above these rings as GamePad Viewer updates them.
  */
 .xbox.edit .sticks::before,
@@ -148,7 +207,7 @@ body {
 .xbox.edit .stick {
   z-index: 1;
   box-sizing: border-box;
-  border: 2px solid rgba(34, 211, 238, 0.72);
+  border: 2px solid var(--accent-soft);
   border-radius: 50%;
   filter:
     brightness(1.12)
@@ -160,7 +219,7 @@ body {
 }
 
 .xbox.edit .stick.pressed {
-  border-color: #e6fbff;
+  border-color: var(--accent-bright);
   filter:
     brightness(1.35)
     contrast(1.08)
@@ -181,13 +240,11 @@ body {
   top: 0;
   width: 88px;
   height: 121px;
-  background: url("https://app.gpv.gg/xbox-assets/trigger.svg") no-repeat;
+  background: var(--accent);
   opacity: 0.08;
-  filter:
-    sepia(1)
-    saturate(8)
-    hue-rotate(145deg)
-    drop-shadow(0 0 4px var(--accent));
+  -webkit-mask: url("https://app.gpv.gg/xbox-assets/trigger.svg") center / contain no-repeat;
+  mask: url("https://app.gpv.gg/xbox-assets/trigger.svg") center / contain no-repeat;
+  filter: drop-shadow(0 0 4px var(--accent));
   pointer-events: none;
 }
 
@@ -203,27 +260,27 @@ body {
 .xbox.edit .trigger {
   position: relative;
   z-index: 1;
+  background: var(--accent) !important;
+  -webkit-mask: url("https://app.gpv.gg/xbox-assets/trigger.svg") center / contain no-repeat;
+  mask: url("https://app.gpv.gg/xbox-assets/trigger.svg") center / contain no-repeat;
   mix-blend-mode: screen;
   filter:
-    sepia(1)
-    saturate(8)
-    hue-rotate(145deg)
     brightness(1.20)
     drop-shadow(0 0 5px var(--accent))
     drop-shadow(0 0 10px var(--accent-soft));
 }
 
-/* Digital shoulder buttons: clear but restrained cyan flash. */
+/* Digital shoulder buttons: clear but restrained purple flash. */
 .xbox.edit .bumper.pressed {
+  background: var(--accent) !important;
+  -webkit-mask: url("https://app.gpv.gg/xbox-assets/bumper.svg") center / contain no-repeat;
+  mask: url("https://app.gpv.gg/xbox-assets/bumper.svg") center / contain no-repeat;
   filter:
-    sepia(1)
-    saturate(7)
-    hue-rotate(145deg)
     brightness(1.25)
     drop-shadow(0 0 6px var(--accent));
 }
 
-/* D-pad directions become crisp and visible when pressed. */
+/* D-pad directions become crisp with a violet glow when pressed. */
 .xbox.edit .face.pressed {
   filter:
     brightness(1.45)
