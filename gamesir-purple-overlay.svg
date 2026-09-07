@@ -24,10 +24,39 @@
       <stop offset="0" stop-color="#c1c7cf" stop-opacity=".15"/>
       <stop offset="1" stop-color="#939baa" stop-opacity=".025"/>
     </linearGradient>
-    <!-- Only the lower left removable grip receives the geometric pattern. -->
     <clipPath id="left-grip">
-      <path d="M17 420 L158 552 C127 586 96 622 76.67 630 C41 625 2 600 .09 529 Q-1 482 17 420Z"/>
+      <path d="M80 247 L230 501 C180 511 106 624 76.67 630 C41 625 2 600 .09 529 C-2 467 26 366 80 247Z"/>
     </clipPath>
+    <clipPath id="right-grip">
+      <path d="M670 247 L520 501 C570 511 644 624 673.33 630 C709 625 748 600 749.91 529 C752 467 724 366 670 247Z"/>
+    </clipPath>
+    <linearGradient id="mesh-fade" gradientUnits="userSpaceOnUse" x1="14" y1="545" x2="150" y2="425">
+      <stop offset="0" stop-color="white" stop-opacity=".95"/>
+      <stop offset=".36" stop-color="white" stop-opacity=".8"/>
+      <stop offset=".72" stop-color="white" stop-opacity=".27"/>
+      <stop offset="1" stop-color="white" stop-opacity="0"/>
+    </linearGradient>
+    <mask id="mesh-into-black" maskUnits="userSpaceOnUse" x="0" y="240" width="235" height="395">
+      <rect x="0" y="240" width="235" height="395" fill="url(#mesh-fade)"/>
+    </mask>
+    <linearGradient id="mesh-top-fade" gradientUnits="userSpaceOnUse" x1="0" y1="380" x2="0" y2="485">
+      <stop offset="0" stop-color="white" stop-opacity="0"/>
+      <stop offset="1" stop-color="white"/>
+    </linearGradient>
+    <mask id="mesh-soft-top" maskUnits="userSpaceOnUse" x="0" y="240" width="235" height="395">
+      <rect x="0" y="240" width="235" height="395" fill="url(#mesh-top-fade)"/>
+    </mask>
+    <linearGradient id="right-smoke" gradientUnits="userSpaceOnUse" x1="604" y1="312" x2="724" y2="590">
+      <stop offset="0" stop-color="#757982" stop-opacity=".66"/>
+      <stop offset=".38" stop-color="#565b65" stop-opacity=".64"/>
+      <stop offset=".7" stop-color="#363a43" stop-opacity=".38"/>
+      <stop offset="1" stop-color="#17191f" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="right-shine" gradientUnits="userSpaceOnUse" x1="602" y1="322" x2="703" y2="495">
+      <stop offset="0" stop-color="#c1c6d0" stop-opacity=".16"/>
+      <stop offset=".6" stop-color="#737986" stop-opacity=".07"/>
+      <stop offset="1" stop-color="#4c5260" stop-opacity="0"/>
+    </linearGradient>
   </defs>
   <g clip-path="url(#faceplate)" mask="url(#control-cutouts)">
     <rect x="70" y="155" width="610" height="347" fill="url(#smoked-polycarbonate)"/>
@@ -38,15 +67,23 @@
     <path d="M99 196 L241 501 H278 L145 196Z" fill="#0a0b10" opacity=".14"/>
     <path d="M640 206 L490 501 H450 L598 206Z" fill="#090b10" opacity=".17"/>
   </g>
-  <g clip-path="url(#left-grip)" fill="none" stroke="#6d28d9" stroke-width="1.15" opacity=".87">
-    <path d="M-8 404 36 434 79 474 120 515 162 553
-             M-8 461 30 448 66 484 111 493
-             M-5 500 22 472 58 502 96 511 137 529
-             M4 552 49 531 92 572 120 515
-             M26 600 49 531 58 502 79 474
-             M70 641 92 572 137 529
-             M-8 404 22 472 36 434 66 484 30 448 -5 500
-             M22 472 66 484 58 502 -5 500
-             M49 531 22 472 M92 572 162 553"/>
+  <!-- Each large triangle is divided into four smaller triangles. All vertices
+       share a regular lattice, so neighbouring triangles meet cleanly at points. -->
+  <g clip-path="url(#left-grip)" mask="url(#mesh-soft-top)">
+  <g mask="url(#mesh-into-black)" fill="none" stroke-linejoin="round">
+    <path d="M-120 390.00h60m-60 0 30 51.96m-30-51.96-30 51.96 M-60 390.00h60m-60 0 30 51.96m-30-51.96-30 51.96 M0 390.00h60m-60 0 30 51.96m-30-51.96-30 51.96 M60 390.00h60m-60 0 30 51.96m-30-51.96-30 51.96 M120 390.00h60m-60 0 30 51.96m-30-51.96-30 51.96 M180 390.00h60m-60 0 30 51.96m-30-51.96-30 51.96 M240 390.00h60m-60 0 30 51.96m-30-51.96-30 51.96 M-90 441.96h60m-60 0 30 51.96m-30-51.96-30 51.96 M-30 441.96h60m-60 0 30 51.96m-30-51.96-30 51.96 M30 441.96h60m-60 0 30 51.96m-30-51.96-30 51.96 M90 441.96h60m-60 0 30 51.96m-30-51.96-30 51.96 M150 441.96h60m-60 0 30 51.96m-30-51.96-30 51.96 M210 441.96h60m-60 0 30 51.96m-30-51.96-30 51.96 M270 441.96h60m-60 0 30 51.96m-30-51.96-30 51.96 M-120 493.92h60m-60 0 30 51.96m-30-51.96-30 51.96 M-60 493.92h60m-60 0 30 51.96m-30-51.96-30 51.96 M0 493.92h60m-60 0 30 51.96m-30-51.96-30 51.96 M60 493.92h60m-60 0 30 51.96m-30-51.96-30 51.96 M120 493.92h60m-60 0 30 51.96m-30-51.96-30 51.96 M180 493.92h60m-60 0 30 51.96m-30-51.96-30 51.96 M240 493.92h60m-60 0 30 51.96m-30-51.96-30 51.96 M-90 545.88h60m-60 0 30 51.96m-30-51.96-30 51.96 M-30 545.88h60m-60 0 30 51.96m-30-51.96-30 51.96 M30 545.88h60m-60 0 30 51.96m-30-51.96-30 51.96 M90 545.88h60m-60 0 30 51.96m-30-51.96-30 51.96 M150 545.88h60m-60 0 30 51.96m-30-51.96-30 51.96 M210 545.88h60m-60 0 30 51.96m-30-51.96-30 51.96 M270 545.88h60m-60 0 30 51.96m-30-51.96-30 51.96 M-120 597.85h60m-60 0 30 51.96m-30-51.96-30 51.96 M-60 597.85h60m-60 0 30 51.96m-30-51.96-30 51.96 M0 597.85h60m-60 0 30 51.96m-30-51.96-30 51.96 M60 597.85h60m-60 0 30 51.96m-30-51.96-30 51.96 M120 597.85h60m-60 0 30 51.96m-30-51.96-30 51.96 M180 597.85h60m-60 0 30 51.96m-30-51.96-30 51.96 M240 597.85h60m-60 0 30 51.96m-30-51.96-30 51.96 M-90 649.81h60m-60 0 30 51.96m-30-51.96-30 51.96 M-30 649.81h60m-60 0 30 51.96m-30-51.96-30 51.96 M30 649.81h60m-60 0 30 51.96m-30-51.96-30 51.96 M90 649.81h60m-60 0 30 51.96m-30-51.96-30 51.96 M150 649.81h60m-60 0 30 51.96m-30-51.96-30 51.96 M210 649.81h60m-60 0 30 51.96m-30-51.96-30 51.96 M270 649.81h60m-60 0 30 51.96m-30-51.96-30 51.96 M-120 701.77h60m-60 0 30 51.96m-30-51.96-30 51.96 M-60 701.77h60m-60 0 30 51.96m-30-51.96-30 51.96 M0 701.77h60m-60 0 30 51.96m-30-51.96-30 51.96 M60 701.77h60m-60 0 30 51.96m-30-51.96-30 51.96 M120 701.77h60m-60 0 30 51.96m-30-51.96-30 51.96 M180 701.77h60m-60 0 30 51.96m-30-51.96-30 51.96 M240 701.77h60m-60 0 30 51.96m-30-51.96-30 51.96" stroke="#7c3aed" stroke-width="1.25"/>
+    <path d="M0 390 -60 493.92 H60Z M60 493.92 0 597.85 H120Z M0 597.85 -60 701.77 H60Z"
+          stroke="#9860ed" stroke-width="1.65" opacity=".62"/>
+  </g>
+  </g>
+  <!-- The right grip follows the photo's smoky diagonal insert and dark
+       elongated polygon details; all artwork stays inside the removable grip. -->
+  <g clip-path="url(#right-grip)">
+    <path d="M661 264 697 305 741 487 686 593 651 536 620 438 565 417Z" fill="url(#right-smoke)"/>
+    <path d="M650 283 673 298 714 481 684 553 656 447 587 397Z" fill="url(#right-shine)"/>
+    <path d="M677 335 Q680 329 684 335 L707 400 Q709 407 705 413 L693 431 Q689 437 685 430 L662 367 Q660 361 664 356Z"
+          fill="#0e1016" opacity=".84"/>
+    <path d="M649 397 662 411 664 438 656 448 644 417Z" fill="#101218" opacity=".79"/>
+    <path d="M687 315 695 329 704 360 698 370 689 346Z" fill="#1a1d24" opacity=".65"/>
   </g>
 </svg>
