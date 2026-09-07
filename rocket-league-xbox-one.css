@@ -112,7 +112,7 @@ body {
   inset: 0;
   width: 750px;
   height: 630px;
-  background-image: url("https://cousinsuke.github.io/gamepadviewer-css/gamesir-purple-overlay.svg");
+  background-image: url("https://cousinsuke.github.io/gamepadviewer-css/gamesir-purple-overlay.svg?v=plate-boundaries-2");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -328,7 +328,7 @@ body {
     drop-shadow(0 0 20px var(--accent-soft));
 }
 
-/* Keep the D-pad face silver/chrome; only its pressed halo becomes purple. */
+/* Stock Xbox + D-pad geometry and resting artwork; purple pressed halo. */
 .xbox.edit .face.pressed {
   filter:
     grayscale(1)
