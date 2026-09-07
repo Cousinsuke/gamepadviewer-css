@@ -1,0 +1,250 @@
+/*
+ * Rocket League Xbox One overlay for GamePad Viewer Beta / app.gpv.gg
+ *
+ * Use this file as the "Edit CSS URL" for an Xbox One GamePad skin.
+ * Recommended OBS Browser Source size: 640 x 540
+ *
+ * Quick edits:
+ *   --overlay-scale  changes the overall controller size (0.70 to 1.00 works well)
+ *   --accent         changes the cyan stick/trigger highlight
+ *   --shadow         changes the controller's soft shadow
+ */
+
+:root {
+  --overlay-scale: 0.82;
+  --accent: #22d3ee;
+  --accent-soft: rgba(34, 211, 238, 0.38);
+  --accent-faint: rgba(34, 211, 238, 0.13);
+  --shadow: rgba(0, 0, 0, 0.62);
+
+  --xbox-a: #39b54a;
+  --xbox-b: #c1272d;
+  --xbox-x: #0071bc;
+  --xbox-y: #fcee21;
+}
+
+/* Transparent, tightly cropped browser canvas. */
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: transparent !important;
+}
+
+.container {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+}
+
+/*
+ * Keep the official Xbox One body artwork. It is already built from black and
+ * dark-grey tones; the forced URL also prevents the white skin from leaking in.
+ */
+.controller.xbox.edit {
+  background-image: url("https://app.gpv.gg/xbox-assets/base.svg") !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  margin: 0 !important;
+  transform: translate(-50%, -50%) scale(var(--overlay-scale)) !important;
+  transform-origin: center center !important;
+  filter:
+    drop-shadow(0 14px 14px var(--shadow))
+    drop-shadow(0 0 7px rgba(255, 255, 255, 0.08));
+}
+
+/* Preserve GamePad Viewer's disconnected warning artwork. */
+.controller.xbox.edit.disconnected {
+  background-image: url("https://app.gpv.gg/xbox-assets/disconnected.svg") !important;
+}
+
+/*
+ * ABXY: keep the normal Xbox sprite row even while pressed. The stock skin's
+ * second sprite row changes to non-Xbox colors, so pressed feedback comes from
+ * brightness, a tiny downward movement, and a color-matched glow instead.
+ */
+.xbox.edit .button {
+  filter: saturate(1.12) brightness(1.05);
+  transition: filter 45ms linear;
+}
+
+.xbox.edit .button.pressed {
+  background-position-y: 0 !important;
+  margin-top: 4px !important;
+  filter: saturate(1.55) brightness(1.65);
+}
+
+.xbox.edit .button.a.pressed {
+  filter:
+    saturate(1.55)
+    brightness(1.65)
+    drop-shadow(0 0 5px var(--xbox-a))
+    drop-shadow(0 0 11px var(--xbox-a));
+}
+
+.xbox.edit .button.b.pressed {
+  filter:
+    saturate(1.55)
+    brightness(1.65)
+    drop-shadow(0 0 5px var(--xbox-b))
+    drop-shadow(0 0 11px var(--xbox-b));
+}
+
+.xbox.edit .button.x.pressed {
+  filter:
+    saturate(1.55)
+    brightness(1.65)
+    drop-shadow(0 0 5px var(--xbox-x))
+    drop-shadow(0 0 11px var(--xbox-x));
+}
+
+.xbox.edit .button.y.pressed {
+  filter:
+    saturate(1.55)
+    brightness(1.65)
+    drop-shadow(0 0 5px var(--xbox-y))
+    drop-shadow(0 0 11px var(--xbox-y));
+}
+
+/*
+ * Static reference rings make the stick travel easy to read during fast aerials.
+ * The real stick caps move above these rings as GamePad Viewer updates them.
+ */
+.xbox.edit .sticks::before,
+.xbox.edit .sticks::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  width: 93px;
+  height: 93px;
+  box-sizing: border-box;
+  border: 1px solid var(--accent-soft);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    transparent 57%,
+    var(--accent-faint) 59%,
+    transparent 63%
+  );
+  box-shadow:
+    inset 0 0 9px rgba(0, 0, 0, 0.75),
+    0 0 7px var(--accent-faint);
+  pointer-events: none;
+}
+
+.xbox.edit .sticks::before {
+  left: -5px;
+  top: -5px;
+}
+
+.xbox.edit .sticks::after {
+  left: 283px;
+  top: 108px;
+}
+
+.xbox.edit .stick {
+  z-index: 1;
+  box-sizing: border-box;
+  border: 2px solid rgba(34, 211, 238, 0.72);
+  border-radius: 50%;
+  filter:
+    brightness(1.12)
+    contrast(1.10)
+    drop-shadow(0 0 4px var(--accent-soft));
+  box-shadow:
+    inset 0 0 7px rgba(255, 255, 255, 0.08),
+    0 0 6px var(--accent-faint);
+}
+
+.xbox.edit .stick.pressed {
+  border-color: #e6fbff;
+  filter:
+    brightness(1.35)
+    contrast(1.08)
+    drop-shadow(0 0 6px var(--accent))
+    drop-shadow(0 0 11px var(--accent-soft));
+}
+
+/*
+ * Triggers remain analog: GamePad Viewer controls each trigger's opacity from
+ * 0 to 1. These faint "rest" shapes show the travel area without flattening it
+ * into an on/off state.
+ */
+.xbox.edit .triggers::before,
+.xbox.edit .triggers::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  width: 88px;
+  height: 121px;
+  background: url("https://app.gpv.gg/xbox-assets/trigger.svg") no-repeat;
+  opacity: 0.08;
+  filter:
+    sepia(1)
+    saturate(8)
+    hue-rotate(145deg)
+    drop-shadow(0 0 4px var(--accent));
+  pointer-events: none;
+}
+
+.xbox.edit .triggers::before {
+  left: 0;
+}
+
+.xbox.edit .triggers::after {
+  right: 0;
+  transform: rotateY(180deg);
+}
+
+.xbox.edit .trigger {
+  position: relative;
+  z-index: 1;
+  mix-blend-mode: screen;
+  filter:
+    sepia(1)
+    saturate(8)
+    hue-rotate(145deg)
+    brightness(1.20)
+    drop-shadow(0 0 5px var(--accent))
+    drop-shadow(0 0 10px var(--accent-soft));
+}
+
+/* Digital shoulder buttons: clear but restrained cyan flash. */
+.xbox.edit .bumper.pressed {
+  filter:
+    sepia(1)
+    saturate(7)
+    hue-rotate(145deg)
+    brightness(1.25)
+    drop-shadow(0 0 6px var(--accent));
+}
+
+/* D-pad directions become crisp and visible when pressed. */
+.xbox.edit .face.pressed {
+  filter:
+    brightness(1.45)
+    drop-shadow(0 0 5px var(--accent))
+    drop-shadow(0 0 10px var(--accent-soft));
+}
+
+/* View/Menu buttons get a small neutral-white flash. */
+.xbox.edit .back.pressed,
+.xbox.edit .start.pressed {
+  filter:
+    brightness(1.55)
+    drop-shadow(0 0 5px rgba(255, 255, 255, 0.75));
+}
+
+/* Keep all decoration out of the way of GamePad Viewer's input handling. */
+.xbox.edit::before,
+.xbox.edit::after,
+.xbox.edit .sticks::before,
+.xbox.edit .sticks::after,
+.xbox.edit .triggers::before,
+.xbox.edit .triggers::after {
+  pointer-events: none;
+}
