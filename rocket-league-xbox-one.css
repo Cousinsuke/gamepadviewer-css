@@ -120,6 +120,11 @@ body {
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.55));
 }
 
+/* Keep all live controls above a large chassis decal. */
+.controller.xbox.edit > div {
+  z-index: 3;
+}
+
 /*
  * ABXY: keep the normal Xbox sprite row even while pressed. The stock skin's
  * second sprite row changes to non-Xbox colors, so pressed feedback comes from
