@@ -15,9 +15,11 @@
 :root {
   --overlay-scale: 0.82;
   --accent: #5b21b6;
-  --accent-bright: #a78bfa;
+  --accent-mid: #7c3aed;
+  --accent-bright: #c4b5fd;
   --accent-soft: rgba(109, 40, 217, 0.46);
   --accent-faint: rgba(109, 40, 217, 0.16);
+  --purple-shape-filter: brightness(0) saturate(100%) invert(22%) sepia(90%) saturate(3715%) hue-rotate(257deg) brightness(84%) contrast(104%);
   --shadow: rgba(0, 0, 0, 0.62);
 
   /* Chassis customisation: keep strength at 0 for the standard black body. */
@@ -100,13 +102,44 @@ body {
 }
 
 /*
- * Optional single decal. Transparent PNG, WebP, or SVG artwork works best.
- * The default value is "none", so no decal is shown until a URL is supplied.
+ * GameSir-inspired angular chassis graphics. The reference controller's orange
+ * accents are purple here, while the black and graphite panels stay neutral.
  */
 .controller.xbox.edit::after {
   content: "";
   position: absolute;
   z-index: 2;
+  inset: 0;
+  width: 750px;
+  height: 630px;
+  background-image: url("https://cousinsuke.github.io/gamepadviewer-css/gamesir-purple-overlay.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  pointer-events: none;
+}
+
+/* Keep all live controls above a large chassis decal. */
+.controller.xbox.edit > div {
+  z-index: 3;
+}
+
+/*
+ * Optional user decal. The otherwise unused meta layer gives us a third artwork
+ * layer without displacing the built-in GameSir chassis overlay above.
+ */
+.controller.xbox.edit .meta {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  width: 750px;
+  height: 630px;
+  pointer-events: none;
+}
+
+.controller.xbox.edit .meta::after {
+  content: "";
+  position: absolute;
   left: var(--decal-left);
   top: var(--decal-top);
   width: var(--decal-width);
@@ -120,57 +153,65 @@ body {
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.55));
 }
 
-/* Keep all live controls above a large chassis decal. */
-.controller.xbox.edit > div {
-  z-index: 3;
-}
-
 /*
- * ABXY: keep the normal Xbox sprite row even while pressed. The stock skin's
- * second sprite row changes to non-Xbox colors, so pressed feedback comes from
- * brightness, a tiny downward movement, and a color-matched glow instead.
+ * GameSir-style ABXY: metallic silver caps with black letters. They stay chrome
+ * when pressed and use a purple edge glow instead of changing to bright colors.
  */
 .xbox.edit .button {
-  filter: saturate(1.12) brightness(1.05);
-  transition: filter 45ms linear;
+  box-sizing: border-box;
+  border: 2px solid #24262c;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 31% 24%, #ffffff 0 12%, #eef0f3 25%, #b8bbc2 52%, #f8fafc 75%, #686c75 100%) !important;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.9),
+    inset 0 -3px 5px rgba(31, 33, 39, 0.62),
+    0 2px 4px rgba(0, 0, 0, 0.72);
+  filter: none;
+  transition: filter 35ms linear, box-shadow 35ms linear;
+}
+
+.xbox.edit .button::after {
+  position: absolute;
+  inset: 0;
+  color: #111217;
+  font-family: "Arial Black", Arial, Helvetica, sans-serif;
+  font-size: 25px;
+  font-weight: 900;
+  line-height: 43px;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.xbox.edit .button.a::after {
+  content: "A";
+}
+
+.xbox.edit .button.b::after {
+  content: "B";
+}
+
+.xbox.edit .button.x::after {
+  content: "X";
+}
+
+.xbox.edit .button.y::after {
+  content: "Y";
 }
 
 .xbox.edit .button.pressed {
-  background-position-y: 0 !important;
+  background-position: center !important;
   margin-top: 4px !important;
-  filter: saturate(1.55) brightness(1.65);
-}
-
-.xbox.edit .button.a.pressed {
+  box-shadow:
+    inset 0 3px 7px rgba(42, 43, 50, 0.65),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.72),
+    0 0 5px var(--accent-bright),
+    0 0 13px var(--accent-mid),
+    0 0 22px var(--accent-soft);
   filter:
-    saturate(1.55)
-    brightness(1.65)
-    drop-shadow(0 0 5px var(--xbox-a))
-    drop-shadow(0 0 11px var(--xbox-a));
-}
-
-.xbox.edit .button.b.pressed {
-  filter:
-    saturate(1.55)
-    brightness(1.65)
-    drop-shadow(0 0 5px var(--xbox-b))
-    drop-shadow(0 0 11px var(--xbox-b));
-}
-
-.xbox.edit .button.x.pressed {
-  filter:
-    saturate(1.55)
-    brightness(1.65)
-    drop-shadow(0 0 5px var(--xbox-x))
-    drop-shadow(0 0 11px var(--xbox-x));
-}
-
-.xbox.edit .button.y.pressed {
-  filter:
-    saturate(1.55)
-    brightness(1.65)
-    drop-shadow(0 0 5px var(--xbox-y))
-    drop-shadow(0 0 11px var(--xbox-y));
+    brightness(1.08)
+    drop-shadow(0 0 4px var(--accent-bright))
+    drop-shadow(0 0 11px var(--accent-mid));
 }
 
 /*
@@ -195,7 +236,9 @@ body {
   );
   box-shadow:
     inset 0 0 9px rgba(0, 0, 0, 0.75),
-    0 0 7px var(--accent-faint);
+    inset 0 0 0 3px rgba(196, 181, 253, 0.12),
+    0 0 5px var(--accent-bright),
+    0 0 13px var(--accent-mid);
   pointer-events: none;
 }
 
@@ -235,7 +278,8 @@ body {
 /*
  * Triggers remain analog: GamePad Viewer controls each trigger's opacity from
  * 0 to 1. These faint "rest" shapes show the travel area without flattening it
- * into an on/off state.
+ * into an on/off state. The original SVG shape is colour-filtered instead of
+ * masked, which is more reliable in OBS Browser Source.
  */
 .xbox.edit .triggers::before,
 .xbox.edit .triggers::after {
@@ -245,11 +289,12 @@ body {
   top: 0;
   width: 88px;
   height: 121px;
-  background: var(--accent);
-  opacity: 0.08;
-  -webkit-mask: url("https://app.gpv.gg/xbox-assets/trigger.svg") center / contain no-repeat;
-  mask: url("https://app.gpv.gg/xbox-assets/trigger.svg") center / contain no-repeat;
-  filter: drop-shadow(0 0 4px var(--accent));
+  background: url("https://app.gpv.gg/xbox-assets/trigger.svg") center / contain no-repeat;
+  opacity: 0.11;
+  filter:
+    var(--purple-shape-filter)
+    drop-shadow(0 0 5px var(--accent-bright))
+    drop-shadow(0 0 12px var(--accent-mid));
   pointer-events: none;
 }
 
@@ -265,32 +310,33 @@ body {
 .xbox.edit .trigger {
   position: relative;
   z-index: 1;
-  background: var(--accent) !important;
-  -webkit-mask: url("https://app.gpv.gg/xbox-assets/trigger.svg") center / contain no-repeat;
-  mask: url("https://app.gpv.gg/xbox-assets/trigger.svg") center / contain no-repeat;
-  mix-blend-mode: screen;
+  background: url("https://app.gpv.gg/xbox-assets/trigger.svg") center / contain no-repeat !important;
   filter:
-    brightness(1.20)
-    drop-shadow(0 0 5px var(--accent))
-    drop-shadow(0 0 10px var(--accent-soft));
+    var(--purple-shape-filter)
+    drop-shadow(0 0 4px var(--accent-bright))
+    drop-shadow(0 0 10px var(--accent-mid))
+    drop-shadow(0 0 19px var(--accent-soft));
 }
 
-/* Digital shoulder buttons: clear but restrained purple flash. */
+/* Digital shoulder buttons: saturated purple shapes with a wide purple glow. */
 .xbox.edit .bumper.pressed {
-  background: var(--accent) !important;
-  -webkit-mask: url("https://app.gpv.gg/xbox-assets/bumper.svg") center / contain no-repeat;
-  mask: url("https://app.gpv.gg/xbox-assets/bumper.svg") center / contain no-repeat;
+  background: url("https://app.gpv.gg/xbox-assets/bumper.svg") center / contain no-repeat !important;
   filter:
-    brightness(1.25)
-    drop-shadow(0 0 6px var(--accent));
+    var(--purple-shape-filter)
+    drop-shadow(0 0 4px var(--accent-bright))
+    drop-shadow(0 0 11px var(--accent-mid))
+    drop-shadow(0 0 20px var(--accent-soft));
 }
 
-/* D-pad directions become crisp with a violet glow when pressed. */
+/* Keep the D-pad face silver/chrome; only its pressed halo becomes purple. */
 .xbox.edit .face.pressed {
   filter:
-    brightness(1.45)
-    drop-shadow(0 0 5px var(--accent))
-    drop-shadow(0 0 10px var(--accent-soft));
+    grayscale(1)
+    brightness(0.92)
+    contrast(1.08)
+    drop-shadow(0 0 3px var(--accent-bright))
+    drop-shadow(0 0 9px var(--accent-mid))
+    drop-shadow(0 0 17px var(--accent-soft));
 }
 
 /* View/Menu buttons get a small neutral-white flash. */
